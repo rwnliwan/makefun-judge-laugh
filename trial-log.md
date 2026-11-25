@@ -157,4 +157,44 @@ Entry for make.fun `u-rama-melon-make-the-ai-judge-laugh-302d0825`
 
 ## 7. Push, About, bundle, check
 
-(to be filled in as the steps run)
+- Remote: `gh` did NOT set origin on `gh repo create` — added manually
+  (`https://github.com/rwnliwan/makefun-judge-laugh.git`), pushed `master`.
+  HEAD local = `ls-remote` = `0d68506d97fc886748d82e6fd6028f6e004cef0c`.
+- GitHub About: homepage
+  `https://make.fun/bounty/u-rama-melon-make-the-ai-judge-laugh-302d0825`
+  + topics `makefun`, `ai-agents`, `bounties` via PUT `names[]`,
+  verified with `gh api` (first PUT with a JSON-string body failed 422;
+  per-item `names[]=` form worked).
+- Repo hygiene verified: README has exactly 3 live make.fun badge URLs
+  (competition + rank + reward, repo name in rank/reward segments);
+  `.makefun/owner.json` present with the agent wallet; repo-wide grep for
+  the forbidden third-party badge-host word: 0 matches; tree clean.
+- Bundle: `transcripts.tar.gz`, 327,649 bytes, sha256
+  `0c0e73258bc0d13e7acd0209ced67894638b0ba0f9300069078990ec96ace2a8`
+  (from the CLI's own stdout). 1 session (70 turns, 225 lines at bundle
+  time), 3 instruction files, parent chat carried as context. Prompt
+  recorded handed-off: Septian's verbatim words "Program makefun yg baru,
+  gas aja yg potensial menang" (copied character-for-character from the
+  parent session's user message; `--prompt-origin typed` was refused
+  because the text is not the first message of an uploaded root session —
+  the parent session opens with scheduler/developer messages — so it went
+  in as handed-off with via "parent agent subagent brief relaying the
+  person's WhatsApp instruction").
+- Usage rows: `muse.db` SELECT (MUSE_APP_USAGE_SELECT) for agent
+  `bca72b03-019d-4280-8a22-dbda5729fb2b` returned **0 rows** (queried 3x,
+  last at end of run). The parent agent `9c19e3e2-...` has 3 rows; this
+  subagent's rows are written only once its run completes. An empty
+  `--muse-usage` file is refused by the CLI, so the bundle carries 0 usage
+  rows (warning recorded in the bundle).
+- Check (commit `0d68506…`, bundle above): **13 passed, 1 failed,
+  5 skipped, 5 checked at submission**. The single failure is
+  `thinking_priced` (0 usage rows, at least 1 required) — NOT fixable from
+  this subagent run, exactly as the CLI's own fix text states: the
+  top-level agent must run the SELECT with its own agent_id and each
+  subagent's, re-bundle, and submit. `thinking_revised` PASSED (main.py
+  takes final content from 2 messages); `thinking_reproduces` 98.4%
+  (192/195 lines); `thinking_own_work` passed; all repo checks passed.
+- Coordinator action: after this run completes, re-run the usage SELECT
+  for `bca72b03-019d-4280-8a22-dbda5729fb2b` (+ the parent id), re-bundle
+  with `--muse-usage`, re-check (expect 14/0), then submit. Do NOT submit
+  the 13/1 bundle as final.
